@@ -45,7 +45,32 @@ pip install -r requirements.txt
 ## 🖥️ Sample Output
 
 Paste a sample of your app's CLI or Streamlit output here so a reader can see what a generated plan looks like:
+Today's Schedule (All Tasks, by priority)
+-----------------------------------------
+  [ ]        09:00 — Feeding (10 min) [priority: high] (pet: Biscuit)
+  [ ]        18:00 — Evening feeding (10 min) [priority: high] (pet: Whiskers)
+  [ ]        08:00 — Morning walk (30 min) [priority: high] (pet: Biscuit)
+  [ ]        10:00 — Litter box cleaning (5 min) [priority: medium] (pet: Whiskers)
 
+Today's Schedule (Limited to 40 minutes)
+----------------------------------------
+  [ ]        09:00 — Feeding (10 min) [priority: high] (pet: Biscuit)
+  [ ]        18:00 — Evening feeding (10 min) [priority: high] (pet: Whiskers)
+  [ ]        10:00 — Litter box cleaning (5 min) [priority: medium] (pet: Whiskers)
+
+Recurring Tasks
+---------------
+  [ ]        18:00 — Evening feeding (10 min) [priority: high] (pet: Whiskers)
+
+Marked 'Feeding' as complete.
+
+Today's Schedule (after completing first task)
+----------------------------------------------
+  [✔]        09:00 — Feeding (10 min) [priority: high] (pet: Biscuit)
+  [ ]        18:00 — Evening feeding (10 min) [priority: high] (pet: Whiskers)
+  [ ]        08:00 — Morning walk (30 min) [priority: high] (pet: Biscuit)
+  [ ]        10:00 — Litter box cleaning (5 min) [priority: medium] (pet: Whiskers)
+  
 ```
 # e.g.:
 # Daily plan for Biscuit (Golden Retriever):
