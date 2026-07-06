@@ -60,9 +60,11 @@ Paste a sample of your app's CLI or Streamlit output here so a reader can see wh
 # Run the full test suite:
 pytest
 
+
 # Run with coverage:
 pytest --cov
 ```
+
 
 Sample test output:
 

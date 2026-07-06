@@ -6,6 +6,12 @@
 
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
+The UML design would allow owners to add and manage their pets, add a care task for a pet (i.e walking, feeding, medical, grooming, etc.) Lastly it would also include the ability generate and view daily plans while filtering tasks and explaining why.
+
+The classes included are Owner, Scheduler, Task, and Pet. Owner contains the pet owner's information and their list of pets. Pet contains a pet's profile and its list of tasks. Task represents an activity for the pet such as walking and feeding, as well as the duration and priority. Scheduler handles the pet's tasks and manages time constraints to create the plan.
+
+
+
 
 **b. Design changes**
 
