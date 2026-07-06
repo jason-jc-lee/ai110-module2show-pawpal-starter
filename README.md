@@ -78,24 +78,37 @@ Today's Schedule (after completing first task)
 #   09:00 — Feeding (10 min) [priority: high]
 #   ...
 ```
+## Testing PawPal+
 
-## 🧪 Testing PawPal+
-
-```bash
-# Run the full test suite:
-pytest
-
-
-# Run with coverage:
-pytest --cov
-```
-
-
-Sample test output:
+Run the test suite with:
 
 ```
-# Paste your pytest output here
+python -m pytest
 ```
+
+This test suite covers:
+- Task completion status changes
+- Task counts when adding tasks to a pet
+- Priority and time sorting
+- Recurring task advancing on completion, and that non-recurring tasks don't create follow-ups
+- Conflict detection for duplicate time slots, and preventing false positives
+- Pets with zero tasks producing an empty plan without errors
+
+Sample output:
+
+```
+=================================== test session starts ====================================
+platform darwin -- Python 3.14.0, pytest-9.1.0, pluggy-1.6.0
+rootdir: /Users/jason/Downloads/ai110-module2show-pawpal-starter
+plugins: anyio-4.13.0
+collected 11 items
+
+tests/test_pawpal.py ...........                                                      [100%]
+
+==================================== 11 passed in 0.03s =====================================
+```
+
+**Confidence Level:** (4/5 stars): The logic seems to be covered by tests, but overlapping-duration conflicts and multi-week recurrence haven't been tested yet.
 
 ## 📐 Smarter Scheduling
 
