@@ -6,6 +6,7 @@ Classes: Task, Pet, Owner, Scheduler
 """
 
 from dataclasses import dataclass, field
+from datetime import date, timedelta
 from typing import List, Optional
 
 
@@ -20,8 +21,9 @@ class Task:
     pet_name: Optional[str] = None  # back-reference so a task can be identified on its own
     is_recurring: bool = False
     recurrence_pattern: Optional[str] = None  # e.g. "daily", "weekly"
-    preferred_time_window: Optional[str] = None  # e.g. "morning", "08:00-09:00"
+    preferred_time_window: Optional[str] = None  # e.g. "08:00" in HH:MM format
     is_complete: bool = False
+    due_date: date = field(default_factory=date.today)
 
     def mark_complete(self) -> None:
         """Mark this task as completed."""
@@ -30,6 +32,35 @@ class Task:
     def mark_incomplete(self) -> None:
         """Mark this task as not completed."""
         self.is_complete = False
+
+    def get_next_occurrence(self) -> Optional["Task"]:
+        """Return a new Task instance for the next occurrence if this task is recurring.
+
+        Daily tasks advance by 1 day, weekly tasks by 7 days, using timedelta.
+        Returns None if the task isn't recurring.
+        """
+        if not self.is_recurring or not self.recurrence_pattern:
+            return None
+
+        if self.recurrence_pattern == "daily":
+            next_due = self.due_date + timedelta(days=1)
+        elif self.recurrence_pattern == "weekly":
+            next_due = self.due_date + timedelta(weeks=1)
+        else:
+            return None
+
+        return Task(
+            name=self.name,
+            category=self.category,
+            duration_minutes=self.duration_minutes,
+            priority=self.priority,
+            pet_name=self.pet_name,
+            is_recurring=self.is_recurring,
+            recurrence_pattern=self.recurrence_pattern,
+            preferred_time_window=self.preferred_time_window,
+            is_complete=False,
+            due_date=next_due,
+        )
 
 
 @dataclass
@@ -54,6 +85,17 @@ class Pet:
     def task_count(self) -> int:
         """Return how many tasks this pet currently has."""
         return len(self.tasks)
+
+    def mark_complete_and_advance(self, task: Task) -> Optional[Task]:
+        """Mark a task complete, and if it's recurring, automatically add the next occurrence.
+
+        Returns the newly created next-occurrence Task, or None if the task doesn't recur.
+        """
+        task.mark_complete()
+        next_task = task.get_next_occurrence()
+        if next_task is not None:
+            self.add_task(next_task)
+        return next_task
 
 
 @dataclass
@@ -121,6 +163,56 @@ class Scheduler:
             if t not in unique_conflicts:
                 unique_conflicts.append(t)
         return unique_conflicts
+
+    def sort_by_time(self, tasks: List[Task]) -> List[Task]:
+        """Sort tasks by their preferred_time_window ('HH:MM' string), earliest first.
+
+        Tasks with no time set are pushed to the end.
+        """
+        return sorted(
+            tasks,
+            key=lambda t: (t.preferred_time_window is None, t.preferred_time_window or ""),
+        )
+
+    def filter_tasks(
+        self,
+        tasks: List[Task],
+        pet_name: Optional[str] = None,
+        is_complete: Optional[bool] = None,
+    ) -> List[Task]:
+        """Filter tasks by pet name and/or completion status.
+
+        Any filter left as None is ignored (not applied).
+        """
+        result = tasks
+        if pet_name is not None:
+            result = [t for t in result if t.pet_name == pet_name]
+        if is_complete is not None:
+            result = [t for t in result if t.is_complete == is_complete]
+        return result
+
+    def detect_time_conflicts(self, tasks: List[Task]) -> List[str]:
+        """Lightweight conflict check: return warning strings for tasks sharing an exact time slot.
+
+        This does not crash the program — it just returns human-readable warnings for the
+        caller (e.g. main.py) to print or log. Only exact HH:MM matches are flagged; true
+        overlapping durations are not checked (see reflection.md for this tradeoff).
+        """
+        warnings: List[str] = []
+        seen: dict = {}
+        for task in tasks:
+            slot = task.preferred_time_window
+            if not slot:
+                continue
+            if slot in seen:
+                other = seen[slot]
+                warnings.append(
+                    f"⚠️ Conflict at {slot}: '{task.name}' ({task.pet_name}) "
+                    f"overlaps with '{other.name}' ({other.pet_name})"
+                )
+            else:
+                seen[slot] = task
+        return warnings
 
     def expand_recurring_tasks(self, tasks: List[Task]) -> List[Task]:
         """Return only the tasks that are marked recurring (placeholder for future date logic)."""

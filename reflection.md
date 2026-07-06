@@ -27,11 +27,15 @@ Yes, my design changed during implementation as my Task had no reference to the 
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
 - How did you decide which constraints mattered most?
 
+My scheduler considered task priority, each task's preferred time slot, daily time budget, and whether a task is recurring. Priority is the main factor in the method sort_by_priority(), since priority should matter most. Priority would focus more on a pet's health, so safety-related tasks like feeding or medication shouldn't get pushed aside. Time is used to order tasks and to catch scheduling conflicts. The time budget in the method generate_plan() lets the scheduler filter out lower-priority tasks once minutes are used up, and recurring tasks are renewed once completed.
+
+
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
 
+A tradeoff that my scheduler makes is that it checks for exact time matches than checking for overlapping durations. For example, a 30 minute task that starts at 9 AM and another a 9:15 AM, will overlap, but the scheduler wouldn't flag it since it only looks at start times. This is reasonable, since exact matching is faster and catches obvious scheduling mistakes, while overlap checking would need more complexity.
 ---
 
 ## 3. AI Collaboration

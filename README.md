@@ -101,13 +101,14 @@ Sample test output:
 
 > Fill in once you've implemented scheduling logic.
 
+## 📐 Smarter Scheduling
+
 | Feature | Method(s) | Notes |
 |---------|-----------|-------|
-| Task sorting | | e.g., by priority, duration |
-| Filtering | | e.g., skip tasks if time runs out |
-| Conflict handling | | e.g., overlapping time slots |
-| Recurring tasks | | e.g., daily vs. weekly |
-
+| Task sorting | `Scheduler.sort_by_priority()`, `Scheduler.sort_by_time()` | Sorts by priority (high→low) or by HH:MM time; untimed tasks sort last |
+| Filtering | `Scheduler.filter_tasks()` | Filters by pet name and/or completion status |
+| Conflict handling | `Scheduler.detect_time_conflicts()` | Flags exact time-slot matches, returns warning strings instead of crashing |
+| Recurring tasks | `Task.get_next_occurrence()`, `Pet.mark_complete_and_advance()` | Auto-creates the next occurrence (+1 day or +7 days via `timedelta`) when a recurring task is completed |
 ## 📸 Demo Walkthrough
 
 Describe your app in numbered steps so a reader can follow along without watching a video:
