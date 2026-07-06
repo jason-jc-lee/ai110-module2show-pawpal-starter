@@ -6,7 +6,7 @@ st.title("🐾 PawPal+")
 
 st.markdown(
     """
-Welcome to PawPal+ — a pet care planning assistant that helps you build a
+Welcome to PawPal+, a pet care planning assistant that helps you build a
 daily schedule of care tasks for your pet, based on priority and time constraints.
 """
 )
