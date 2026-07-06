@@ -17,6 +17,7 @@ class Task:
     category: str  # e.g. "walk", "feeding", "meds", "enrichment", "grooming"
     duration_minutes: int
     priority: str  # e.g. "high", "medium", "low"
+    pet_name: Optional[str] = None  # back-reference so a task can be identified on its own
     is_recurring: bool = False
     recurrence_pattern: Optional[str] = None  # e.g. "daily", "weekly"
     preferred_time_window: Optional[str] = None  # e.g. "morning", "08:00-09:00"

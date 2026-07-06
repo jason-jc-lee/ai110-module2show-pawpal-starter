@@ -17,7 +17,7 @@ The classes included are Owner, Scheduler, Task, and Pet. Owner contains the pet
 
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
-
+Yes, my design changed during implementation as my Task had no reference to the Pet it belonged to. Pet only held a list of Tasks but Tasks doesn't know this. To fix this, I decided to add a pet_name field in Task so each task can be identified independently. This would matter when Scheduler will need to work with tasks from multiple pets at once. Without this, it would be difficult to know which pet belongs to who.
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
