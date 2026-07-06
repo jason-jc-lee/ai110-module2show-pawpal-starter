@@ -45,10 +45,14 @@ A tradeoff that my scheduler makes is that it checks for exact time matches than
 - How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
 - What kinds of prompts or questions were most helpful?
 
+I used Claude to help brainstorm ideas about how classes should work, as well as debugging code and terminal errors that happen when trying to run it. The kinds of prompts or questions that were helpful was asking if whether the code written was able to support future additions rather than supporting only what is necessary and current. This would make it easier for future implementations of features to be added more smoothly rather than having to deal with that problem later.
+
 **b. Judgment and verification**
 
 - Describe one moment where you did not accept an AI suggestion as-is.
 - How did you evaluate or verify what the AI suggested?
+
+One moment was the conflict detection logic in Phase 4. The AI's version could have implemented full overlapping-duration checking, but there was a simpler approach. This was done by running main.py with test cases that had tasks at the same time and at slightly overlapping times, which just confirms that the simpler version still caught the same conflicts without adding complexity.
 
 ---
 
@@ -59,10 +63,14 @@ A tradeoff that my scheduler makes is that it checks for exact time matches than
 - What behaviors did you test?
 - Why were these tests important?
 
+I tested task completion status changes, task counts when adding tasks to a pet, priority and time sorting, recurring task when a daily task is completed, conflict detection for duplicate time slots, and a pet with zero tasks producing an empty schedule instead of crashing. These were important since they cover both the expected results and edge cases that could possibly crash or fail silently.
+
 **b. Confidence**
 
 - How confident are you that your scheduler works correctly?
 - What edge cases would you test next if you had more time?
+
+I am somewhat confident, since all 11 tests pass. I went through the logic and behavior in main.py and the Streamlit. If I had more time, I would test more types of time conflicts, multi-week recurrences, and the case where an owner has many pets with dozens of tasks at once.
 
 ---
 
@@ -72,10 +80,17 @@ A tradeoff that my scheduler makes is that it checks for exact time matches than
 
 - What part of this project are you most satisfied with?
 
+I'm satisfied with getting the recurring task logic to work. Using timedelta and the method Pet.mark_complete_and_advance(), it was able to work in the CLI and the Streamlit app.
+
 **b. What you would improve**
 
 - If you had another iteration, what would you improve or redesign?
 
+I would improve the conflict detection to check for more possible overlapping durations instead of just exact time matches and add further support to multiple pets at once.
+
 **c. Key takeaway**
 
 - What is one important thing you learned about designing systems or working with AI on this project?
+
+I learned that working with AI is useful when treating it like another person/collaborator. This creates challenge for me to learn and question decisions on creating the project.
+

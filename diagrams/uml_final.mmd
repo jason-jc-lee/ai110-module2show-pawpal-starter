@@ -1,0 +1,59 @@
+classDiagram
+    class Task {
+        +str name
+        +str category
+        +int duration_minutes
+        +str priority
+        +str pet_name
+        +bool is_recurring
+        +str recurrence_pattern
+        +str preferred_time_window
+        +bool is_complete
+        +date due_date
+        +mark_complete() None
+        +mark_incomplete() None
+        +get_next_occurrence() Task
+    }
+
+    class Pet {
+        +str name
+        +str species
+        +str breed
+        +int age
+        +List~Task~ tasks
+        +add_task(task: Task) None
+        +get_tasks() List~Task~
+        +task_count() int
+        +mark_complete_and_advance(task: Task) Task
+    }
+
+    class Owner {
+        +str name
+        +str contact_info
+        +List~str~ preferences
+        +List~Pet~ pets
+        +add_pet(pet: Pet) None
+        +get_pets() List~Pet~
+        +get_all_tasks() List~Task~
+    }
+
+    class Scheduler {
+        +dict PRIORITY_ORDER
+        +str day_start
+        +str day_end
+        +get_tasks_for_owner(owner: Owner) List~Task~
+        +sort_by_priority(tasks: List~Task~) List~Task~
+        +sort_by_time(tasks: List~Task~) List~Task~
+        +filter_tasks(tasks: List~Task~, pet_name: str, is_complete: bool) List~Task~
+        +detect_conflicts(tasks: List~Task~) List~Task~
+        +detect_time_conflicts(tasks: List~Task~) List~str~
+        +expand_recurring_tasks(tasks: List~Task~) List~Task~
+        +generate_plan(owner: Owner, available_minutes: int) List~Task~
+    }
+
+    Owner "1" --> "many" Pet : has
+    Pet "1" --> "many" Task : has
+    Task ..> Pet : pet_name references
+    Scheduler ..> Owner : reads via get_tasks_for_owner
+    Scheduler ..> Task : sorts, filters, checks conflicts
+    Pet ..> Task : mark_complete_and_advance creates next occurrence

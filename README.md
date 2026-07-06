@@ -122,14 +122,55 @@ tests/test_pawpal.py ...........                                                
 | Filtering | `Scheduler.filter_tasks()` | Filters by pet name and/or completion status |
 | Conflict handling | `Scheduler.detect_time_conflicts()` | Flags exact time-slot matches, returns warning strings instead of crashing |
 | Recurring tasks | `Task.get_next_occurrence()`, `Pet.mark_complete_and_advance()` | Auto-creates the next occurrence (+1 day or +7 days via `timedelta`) when a recurring task is completed |
+## ✨ Features
+
+- **Owner and pet management** - track multiple pets per owner, each with their own task list
+- **Task tracking** — name, category, duration, priority, optional time slot, and completion status
+- **Priority-based sorting** — Scheduler.sort_by_priority() orders tasks from high to low
+- **Time-based sorting** — Scheduler.sort_by_time() orders tasks chronologically
+- **Filtering** — Scheduler.filter_tasks()` filters by pet name and completion status
+- **Conflict warnings** — Scheduler.detect_time_conflicts() flags tasks scheduled at the same time, without crashing 
+- **Daily/weekly recurrence** — Pet.mark_complete_and_advance() automatically creates the next occurrence of a recurring task 
+- **Time-budgeted planning** — Scheduler.generate_plan() builds a plan that fits within a limited number of available minutes
+
 ## 📸 Demo Walkthrough
 
-Describe your app in numbered steps so a reader can follow along without watching a video:
+**Main UI features:**
+- Enter owner and pet info (persists across the session)
+- Add tasks with a title, duration, priority, optional time, and optional recurrence
+- View today's schedule sorted by priority or time, with completed tasks optionally hidden
+- See conflict warnings automatically if two tasks share a time slot
+- Mark tasks complete so recurring tasks automatically re-occur for their next date
+- Generate a plan that includes as many tasks as fit in the available minutes
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+**Example Process:**
+1. Enter an owner name and add a pet (i.e "Mochi," a dog)
+2. Add a task: "Morning walk," 20 minutes, high priority, 08:00
+3. Add a second task: "Grooming," 10 minutes, medium priority, also at 08:00 (a conflict warning appears)
+4. Toggle to sort by time to see the tasks in chronological order
+5. Mark "Morning walk" complete, then set a task as "Recurring: daily" to see a new occurrence get auto-scheduled for tomorrow
+6. Set a 30-minute time budget and click "Generate schedule" to see only the highest-priority tasks that fit
+
+**Key Scheduler behaviors shown:** priority sorting, time sorting, filtering by completion status, conflict detection, and recurring task.
+
+**Sample CLI output** (from running `python main.py`):
+
+```
+Today's Schedule (All Tasks, by priority)
+-----------------------------------------
+  [ ]        09:00 — Feeding (10 min) [priority: high] (pet: Biscuit)
+  [ ]        18:00 — Evening feeding (10 min) [priority: high] (pet: Whiskers)
+  [ ]        08:00 — Morning walk (30 min) [priority: high] (pet: Biscuit)
+  [ ]        10:00 — Litter box cleaning (5 min) [priority: medium] (pet: Whiskers)
+  [ ]        09:00 — Vet check-in call (10 min) [priority: medium] (pet: Whiskers)
+  [ ]        07:30 — Playtime (15 min) [priority: low] (pet: Biscuit)
+
+Conflict Check
+--------------
+  ⚠️ Conflict at 09:00: 'Vet check-in call' (Whiskers) overlaps with 'Feeding' (Biscuit)
+
+Marked 'Evening feeding' complete (recurring: daily).
+Auto-created next occurrence: due 2026-07-07 (is_complete=False)
+```
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or link to a demo video here -->
